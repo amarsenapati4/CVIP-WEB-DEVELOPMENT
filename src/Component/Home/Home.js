@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link } from "react-router-dom";
 import { BiPlay } from "react-icons/bi"
 import { AiOutlinePlus } from "react-icons/ai"
 
@@ -13,9 +12,9 @@ const nowPlaying = "now_playing";
 const popular = "popular";
 const topRated = "top_rated";
 
-const Card=({img})=>{
+const Card=({poster})=>{
   return(
-<img src={img} className='w-[200px] cursor-pointer hover:translate-y-[-10px] hover:scale-105 transition-[0.5s] border-red-900 m-[0.3rem] ' alt="cover image"/>
+<img src={poster} className='w-[200px] cursor-pointer hover:translate-y-[-10px] hover:scale-105 transition-[0.5s] border-red-900 m-[0.3rem] ' alt="cover"/>
   )
 }
 
@@ -25,7 +24,7 @@ const Row = ({title,arr = []}) => {
         <h2 className='m-[0.3 rem] text-white font-bold'>{title}</h2>
         <div className='flex overflow-x-scroll scroll-card '>
         {arr.map((item, index) => (
-                <Card key={index} img={`${imgUrl}/${item.poster_path}`} />
+                <Card key={index} poster={`${imgUrl}/${item.poster_path}`} />
             ))}
        
         </div>
@@ -38,7 +37,7 @@ const Home = () => {
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [popularMovies, setPopularMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [genre, setGenre] = useState([]);
+
 
   useEffect(()=>{
     const Upcoming = async () => {
@@ -65,14 +64,7 @@ const fetchTopRated = async () => {
     } = await axios.get(`${url}/movie/${topRated}?api_key=${apiKey}`);
     setTopRatedMovies(results);
 };
-const getAllGenre = async () => {
-    const {
-        data: { genres },
-    } = await axios.get(`${url}/genre/movie/list?api_key=${apiKey}`);
-    setGenre(genres);
-    console.log(genres);
-};
-getAllGenre();
+
 Upcoming();
 fetchNowPlaying();
         fetchPopular();
